@@ -1,28 +1,66 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
-import HomeScreen from './HomeScreen.js'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import HomeScreen from './screens/HomeScreen.js'
+import CoursesScreen from './screens/CoursesScreen.js'
+import AddScreen from './screens/AddScreen.js'
+import SearchScreen from './screens/SearchScreen.js'
+import ProfileScreen from './screens/ProfileScreen.js'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function App() {
 
-  const Stack = createStackNavigator();
+  const Tabs = createBottomTabNavigator();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator 
-        initialRouteName="HomeScreen" 
-        screenOptions={{
-          headerStyle:{backgroundColor:'orange', height:75},
-          headerTitle:"Prompt.ly",
-          headerTintColor:'white',
-          headerTitleStyle:{fontSize:30, fontFamily:'Arial'}
-        }}>
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-        />
-      </Stack.Navigator>
+      <Tabs.Navigator 
+        initialRouteName="HomeScreen"
+        screenOptions={({route}) =>({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = 'ios-home'
+            } else if (route.name === 'Profile') {
+              iconName = 'ios-person'
+            } else if (route.name === 'Courses'){
+              iconName = 'ios-school'
+            } else if (route.name === 'Search'){
+              iconName = 'ios-search'
+            } else if (route.name === 'Add Homework'){
+              iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline'
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+            },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'orange'
+        }}
+      >
+          <Tabs.Screen
+            name="Home"
+            component={HomeScreen}
+          />
+          <Tabs.Screen
+            name="Courses"
+            component={CoursesScreen}
+          />
+          <Tabs.Screen
+            name="Add Homework"
+            component={AddScreen}
+          />
+          <Tabs.Screen
+            name="Search"
+            component={SearchScreen}
+          />
+          <Tabs.Screen
+            name="Profile"
+            component={ProfileScreen}
+          />
+      </Tabs.Navigator>
     </NavigationContainer>
   );
 }
