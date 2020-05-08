@@ -1,7 +1,9 @@
 import * as React from 'react'
 import {StyleSheet, View, Text} from 'react-native'
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
+import {createStackNavigator} from '@react-navigation/stack'
 import HomeworkList from './HomeworkList.js'
+import HomeScreen from './HomeScreen.js'
 
 
 // screenOptions={{
@@ -13,29 +15,22 @@ import HomeworkList from './HomeworkList.js'
 
 export default function HomeTab({navigation}){
 
+    const HomeStack = createStackNavigator(); // solely for the header
     const HomeTopTabs = createMaterialTopTabNavigator();
-// the plan for the top tabs is to just pass the prop that is applicable to the name: All Homeworks, Homeworks due this week, Homeworks due this month
+
     return(
-        <HomeTopTabs.Navigator
+        <HomeStack.Navigator
         screenOptions={{
                     headerTitle: 'Prompt.ly',
                     headerStyle:{backgroundColor:'orange', height:125},
                     // headerTitleStyle:{fontSize:40, color:'white', fontFamily:'Chalkduster'}
                     headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
                 }}>
-            <HomeTopTabs.Screen
-                name="All Homeworks"
-                component={HomeworkList}
+            <HomeStack.Screen
+                name="Home"
+                component={HomeScreen}
             />
-            <HomeTopTabs.Screen
-                name="This Week's Homeworks"
-                component={HomeworkList}
-            />
-            <HomeTopTabs.Screen
-                name="This Month's Homeworks"
-                component={HomeworkList}
-            />
-        </HomeTopTabs.Navigator>
+        </HomeStack.Navigator>
     )
 }
 

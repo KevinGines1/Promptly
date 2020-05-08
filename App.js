@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import HomeScreen from './screens/HomeScreen.js'
+import HomeTab from './screens/HomeTab.js'
 import CoursesScreen from './screens/CoursesScreen.js'
 import AddScreen from './screens/AddScreen.js'
 import SearchScreen from './screens/SearchScreen.js'
@@ -16,12 +16,12 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tabs.Navigator 
-        initialRouteName="HomeScreen"
+        initialRouteName="HomeTab"
         screenOptions={({route}) =>({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'HomeTab') {
               iconName = 'ios-home'
             } else if (route.name === 'Profile') {
               iconName = 'ios-person'
@@ -41,8 +41,8 @@ export default function App() {
         }}
       >
           <Tabs.Screen
-            name="Home"
-            component={HomeScreen}
+            name="HomeTab"
+            component={HomeTab}
           />
           <Tabs.Screen
             name="Courses"
