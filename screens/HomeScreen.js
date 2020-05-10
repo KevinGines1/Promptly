@@ -20,7 +20,6 @@ export default function HomeTab({navigation}){
         screenOptions={{
                     headerTitle: 'Prompt.ly',
                     headerStyle:{backgroundColor:'orange', height:125},
-                    // headerTitleStyle:{fontSize:40, color:'white', fontFamily:'Chalkduster'}
                     headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
                 }}>
             <HomeTopTabs.Screen

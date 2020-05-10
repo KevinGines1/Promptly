@@ -15,7 +15,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Tabs.Navigator 
+      <Tabs.Navigator mode="modal"
         initialRouteName="HomeTab"
         screenOptions={({route}) =>({
           tabBarIcon: ({ focused, color, size }) => {

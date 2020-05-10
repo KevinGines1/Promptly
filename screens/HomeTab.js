@@ -1,24 +1,14 @@
 import * as React from 'react'
 import {StyleSheet, View, Text} from 'react-native'
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import {createStackNavigator} from '@react-navigation/stack'
-import HomeworkList from './HomeworkList.js'
 import HomeScreen from './HomeScreen.js'
-
-
-// screenOptions={{
-//     headerStyle:{backgroundColor:'orange', height:75},
-//     headerTitle:"Prompt.ly",
-//     headerTintColor:'white',
-//     headerTitleStyle:{fontSize:30, fontFamily:'Arial'}
-//   }}
 
 export default function HomeTab({navigation}){
 
     const HomeStack = createStackNavigator(); // solely for the header
-    const HomeTopTabs = createMaterialTopTabNavigator();
 
     return(
+        // <HomeStack.Navigator
         <HomeStack.Navigator
         screenOptions={{
                     headerTitle: 'Prompt.ly',

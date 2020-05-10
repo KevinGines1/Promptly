@@ -1,7 +1,7 @@
 import * as React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
+import {StyleSheet, View, Text, Button, TextInput} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
-import HomeworkList from './HomeworkList.js' // placeholder, this should be a form for inputting a new homework
+import AddHomeWorkInput from '../components/AddHomeWorkInput.js' // placeholder, this should be a form for inputting a new homework
 
 export default function AddScreen({navigation}){
     
@@ -16,7 +16,8 @@ export default function AddScreen({navigation}){
                 headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
             }}    
         >
-            <HomeStack.Screen name="All Homeworks" component={HomeworkList}/>
+            {/* <AddHomeWorkInput/> */}
+            <HomeStack.Screen name="All Homeworks" component={AddHomeWorkInput}/>
         </HomeStack.Navigator>
     )
 }
