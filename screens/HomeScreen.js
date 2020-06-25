@@ -11,31 +11,35 @@ import HomeworkList from './HomeworkList.js'
 //     headerTitleStyle:{fontSize:30, fontFamily:'Arial'}
 //   }}
 
-export default function HomeTab({navigation}){
+class HomeScreen extends React.Component{
 
-    const HomeTopTabs = createMaterialTopTabNavigator();
-// the plan for the top tabs is to just pass the prop that is applicable to the name: All Homeworks, Homeworks due this week, Homeworks due this month
-    return(
-        <HomeTopTabs.Navigator
-        screenOptions={{
-                    headerTitle: 'Prompt.ly',
-                    headerStyle:{backgroundColor:'orange', height:125},
-                    headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
-                }}>
-            <HomeTopTabs.Screen
-                name="All Homeworks"
-                component={HomeworkList}
-            />
-            <HomeTopTabs.Screen
-                name="This Week's Homeworks"
-                component={HomeworkList}
-            />
-            <HomeTopTabs.Screen
-                name="This Month's Homeworks"
-                component={HomeworkList}
-            />
-        </HomeTopTabs.Navigator>
-    )
+    render(){
+        const HomeTopTabs = createMaterialTopTabNavigator();
+        return(
+            <HomeTopTabs.Navigator
+            screenOptions={{
+                        headerTitle: 'Prompt.ly',
+                        headerStyle:{backgroundColor:'orange', height:125},
+                        headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
+                    }}>
+                <HomeTopTabs.Screen
+                    name="All Homeworks"
+                    component={HomeworkList}
+                    initialParams={{filter: "all"}}
+                />
+                <HomeTopTabs.Screen
+                    name="This Week's Homeworks"
+                    component={HomeworkList}
+                    initialParams={{ filter: "this week" }}
+                />
+                <HomeTopTabs.Screen
+                    name="This Month's Homeworks"
+                    component={HomeworkList}
+                    initialParams={{ filter: "this month" }}
+                />
+            </HomeTopTabs.Navigator>
+        )
+    }
 }
 
 
@@ -51,3 +55,10 @@ const styles = StyleSheet.create({
         fontSize:20,
     }
 })
+
+const mapStateToProps = state => {
+    return {
+        username : state.username
+    }
+}
+ export default HomeScreen

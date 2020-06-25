@@ -2,6 +2,7 @@ import * as React from 'react'
 import {StyleSheet, View, Text} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
 import HomeworkList from './HomeworkList.js' // placeholder, this should be a screen for the user profile
+import Fonts from '../IosFonts.js'
 
 export default function ProfileScreen({navigation}){
     
@@ -16,7 +17,8 @@ export default function ProfileScreen({navigation}){
                 headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
             }}    
         >
-            <HomeStack.Screen name="All Homeworks" component={HomeworkList}/>
+            <HomeStack.Screen name="Fonts" component={Fonts} />
+            {/* <HomeStack.Screen name="All Homeworks" component={HomeworkList}/> */}
         </HomeStack.Navigator>
     )
 }

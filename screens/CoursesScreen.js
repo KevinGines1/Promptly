@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {StyleSheet, View, Text} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
-import HomeworkList from './HomeworkList.js' // placeholder, this should be courses list in the future
+import Fonts from '../IosFonts.js'
 
 export default function CoursesScreen({navigation}){
     const HomeStack = createStackNavigator();
@@ -15,7 +15,7 @@ export default function CoursesScreen({navigation}){
                 headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
             }}    
         >
-            <HomeStack.Screen name="All Homeworks" component={HomeworkList}/>
+            <HomeStack.Screen name="Fonts" component={Fonts}/>
         </HomeStack.Navigator>
     )
 }

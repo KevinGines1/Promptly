@@ -1,74 +1,82 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {View, TextInput, Text, Button, KeyboardAvoidingView, StyleSheet} from 'react-native'
 
-export default function AddHomeWorkInput(){
-    const [homework, setHomework] = useState({
+//redux
+import {connect} from 'react-redux'
+import {addHomeworkAsync} from '../redux/actions'
+
+class AddHomeWorkInput extends React.Component{
+
+    state = {
         title:'',
         // id: 
         description:'',
-        duedate:'',
-        className:'',
-    })
+        due_date:'',
+        school_email: this.props.email,
+        username: this.props.username
+        // className:'',   
+    }
 
-    handleTitleChange = (title) =>{
-        setHomework({
-            title
+    handleTitleChange = event =>{
+        this.setState({title: event})
+    }
+    handleDescChange = event =>{
+        this.setState({description: event})
+    }
+    handleDueChange = event =>{
+        this.setState({due_date : event})
+    }
+
+    handleFormSubmit = async event =>{
+        event.preventDefault()
+        await this.props.addHomeworkAsync(this.state)
+        this.props.navigation.navigate('Homework Added')
+        // reset form 
+        this.setState({
+          title: '',
+          // id: 
+          description: '',
+          due_date: '',
+          school_email: this.props.email,
+          username: this.props.username
+        // className:'',
         })
-    }
-
-    handleDescChange = (description) =>{
-        setHomework({
-            description
-        })
-    }
-
-    handleDueChange = (duedate) =>{
-        setHomework({
-            duedate
-        })
-    }
-
-    handleClassChange = (className) => {
-        setHomework({
-            className
-        })
-    }
-
-    addHomework = () => {
-
-    }
-    return(
-            <KeyboardAvoidingView behavior="height" style={styles.container} >
-                <TextInput
-                    style={styles.inputField}
-                    placeholder="Homework Title"
-                    value={homework.title}
-                    onChangeText={handleTitleChange}
-                />
-                <TextInput
-                    style={styles.inputField}
-                    placeholder="Homework Description"
-                    // multiline
-                    value={homework.description}
-                    onChangeText={handleDescChange}
-                />
-                <TextInput
-                    style={styles.inputField}
-                    placeholder="Due date"
-                    value={homework.duedate}
-                    onChangeText={handleDueChange}
-                />
-                <TextInput
-                    style={styles.inputField}
-                    placeholder="Class"
-                    value={homework.class}
-                    onChangeText={handleClassChange}
-                />
-                <Button title="Add Homework"/>
-            </KeyboardAvoidingView>
-
         
-    );
+    }
+
+    render(){
+        return (
+          <KeyboardAvoidingView behavior="padding" style={styles.container}>
+            <Button style={styles.addHWBtn} title="Add Homework" onPress={this.handleFormSubmit}/>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Homework Title"
+              name="title"
+              onChangeText={this.handleTitleChange}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Homework Description"
+              name="description"
+              // multiline
+              maxLength={50}
+              onChangeText={this.handleDescChange}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Due date"
+              name="due_date"
+              onChangeText={this.handleDueChange}
+            />
+            {/* <TextInput
+                        style={styles.inputField}
+                        placeholder="Class"
+                        name="className"
+                        onChangeText={this.handleInputChange}
+                    /> */}
+          </KeyboardAvoidingView>
+        );
+    }
 }
 
 
@@ -76,13 +84,25 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         alignItems:'center',
-        justifyContent: 'space-evenly'
+        justifyContent: 'flex-start'
     },
     inputField:{
+        margin:15,
         borderWidth:1,
         // padding:20,
         width:400,
         height:50,
         textAlign:'center',
-    }
+    },
 })
+
+const mapStateToProps = state => {
+    return {
+        username : state.username,
+        email : state.email,
+    }
+}
+
+
+
+export default connect(mapStateToProps, {addHomeworkAsync})(AddHomeWorkInput)

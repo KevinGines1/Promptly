@@ -9,60 +9,68 @@ import SearchScreen from './screens/SearchScreen.js'
 import ProfileScreen from './screens/ProfileScreen.js'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-export default function App() {
+//redux
+import {Provider} from 'react-redux'
+import store from './redux/store'
 
-  const Tabs = createBottomTabNavigator();
+class App extends React.Component {
 
-  return (
-    <NavigationContainer>
-      <Tabs.Navigator mode="modal"
-        initialRouteName="HomeTab"
-        screenOptions={({route}) =>({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'HomeTab') {
-              iconName = 'ios-home'
-            } else if (route.name === 'Profile') {
-              iconName = 'ios-person'
-            } else if (route.name === 'Courses'){
-              iconName = 'ios-school'
-            } else if (route.name === 'Search'){
-              iconName = 'ios-search'
-            } else if (route.name === 'Add Homework'){
-              iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline'
-            }
-
-            return <Ionicons name={iconName} size={size} color={color} />;
-            },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'orange'
-        }}
-      >
-          <Tabs.Screen
-            name="HomeTab"
-            component={HomeTab}
-          />
-          <Tabs.Screen
-            name="Courses"
-            component={CoursesScreen}
-          />
-          <Tabs.Screen
-            name="Add Homework"
-            component={AddScreen}
-          />
-          <Tabs.Screen
-            name="Search"
-            component={SearchScreen}
-          />
-          <Tabs.Screen
-            name="Profile"
-            component={ProfileScreen}
-          />
-      </Tabs.Navigator>
-    </NavigationContainer>
-  );
+  
+  render(){
+    const Tabs = createBottomTabNavigator();
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Tabs.Navigator mode="modal"
+            initialRouteName="HomeTab"
+            screenOptions={({route}) =>({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+  
+                if (route.name === 'Home') {
+                  iconName = 'ios-home'
+                } else if (route.name === 'Profile') {
+                  iconName = 'ios-person'
+                } else if (route.name === 'Courses'){
+                  iconName = 'ios-school'
+                } else if (route.name === 'Search'){
+                  iconName = 'ios-search'
+                } else if (route.name === 'Add Homework'){
+                  iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline'
+                }
+  
+                return <Ionicons name={iconName} size={size} color={color} />;
+                },
+            })}
+            tabBarOptions={{
+              activeTintColor: 'orange'
+            }}
+          >
+              <Tabs.Screen
+                name="Home"
+                component={HomeTab}
+              />
+              <Tabs.Screen
+                name="Courses"
+                component={CoursesScreen}
+              />
+              <Tabs.Screen
+                name="Add Homework"
+                component={AddScreen}
+              />
+              <Tabs.Screen
+                name="Search"
+                component={SearchScreen}
+              />
+              <Tabs.Screen
+                name="Profile"
+                component={ProfileScreen}
+              />
+          </Tabs.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -73,3 +81,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+// const mapStateToProps = state => {
+  // return {
+    // username : state.username
+  // }
+// }
+
+// export default connect(mapStateToProps, { getAllHomeworksAsync, getAllHomeworksMonth})(App)
+export default App

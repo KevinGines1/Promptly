@@ -19,7 +19,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(cors({
     origin:[
-        'http://localhost:3000'
+        // 'http://localhost:3000',
+        // 'exp://192.168.254.129:19000'
+        'exp://127.0.0.1:19000'
         // insert here origin of your phone app
     ],
     credentials:true
@@ -35,7 +37,7 @@ database.connect(err => {
     if(err){
         console.log(err)
     }else{
-        console.log('MySQL connected')
+        console.log('MySQL connected!')
     }
 })
 
