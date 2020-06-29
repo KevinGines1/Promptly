@@ -1,11 +1,10 @@
-import {GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK} from './actionTypes'
+import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK, REMOVE_HW} from './actionTypes'
 import * as api from '../utils/api/index'
 
 // * notes: there is a network error when sending a request :SOLVED: REPLACED THE BASE URL IN AXIOS WITH IPV4 ADDRESS (ipconfig)
-// * progress: homeworks are displayed properly according to the filter
-// todo (1): remove an assignment, mark as done, unmark as done
-// todo (2): some more filters for display (course, progress), listviews, authentication
-// * QUERY: SELECT * FROM assignment WHERE WEEK(due_date) = WEEK(CURDATE());
+// * progress: checkbox has functionality
+// todo (1): some more filters for display (course, progress), authentication
+// todo (2): improve add homework feature
 // * synchronous action creators
 export const getAllHomeworks = (listOfHomeworks) =>{
     return {
@@ -25,6 +24,13 @@ export const getAllHomeworksWeek = (listOfHomeworks) => {
     return {
         type: GET_HOMEWORKS_WEEK,
         payload: listOfHomeworks
+    }
+}
+
+export const removeHW = (hwID) => {
+    return {
+        type: REMOVE_HW,
+        payload: hwID
     }
 }
 
@@ -79,7 +85,44 @@ export const addHomeworkAsync = (homeworkInfo) => async(dispatch) => {
         // * using axios
         const response = await api.addHW(homeworkInfo)
         console.log(response.data.msg)
+        dispatch(getAllHomeworksAsync(homeworkInfo.username))
+        dispatch(getWeekHomeworksAsync(homeworkInfo.username))
+        dispatch(getMonthHomeworksAsync(homeworkInfo.username))
     }catch(err){
         console.log("ADD HW ERR: ", err)
+    }
+}
+
+export const removeHomeworkAsync = (homeworkID) => async(dispatch) => {
+    try{
+        const response = await api.removeHW(homeworkID)
+        console.log(response.data.msg)
+        dispatch(removeHW(homeworkID))
+    }catch(err){
+        console.log("REMOVE HW ERR: ", err)
+    }
+}
+
+export const markAsDone = (homeworkID, username) => async(dispatch) => {
+    try{
+        const response = await api.markAsDone(homeworkID)
+        console.log(response.data.msg)
+        dispatch(getAllHomeworksAsync(username))
+        dispatch(getWeekHomeworksAsync(username))
+        dispatch(getMonthHomeworksAsync(username))
+    }catch(err){
+        console.log("MARK AS DONE HW ERR: ", err)
+    }
+}
+
+export const markAsUndone = (homeworkID, username) => async(dispatch) => {
+    try{
+        const response = await api.markAsUndone(homeworkID)
+        console.log(response.data.msg)
+        dispatch(getAllHomeworksAsync(username))
+        dispatch(getWeekHomeworksAsync(username))
+        dispatch(getMonthHomeworksAsync(username))
+    }catch(err){
+        console.log("MARK AS NOT DONE HW ERR: ", err)
     }
 }

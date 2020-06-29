@@ -10,7 +10,6 @@ import { getAllHomeworksAsync, getMonthHomeworksAsync, getWeekHomeworksAsync} fr
 class HomeTab extends React.Component{
     
     async componentDidMount() {
-        console.log("wait what")
         // you should only do this when the user is logged in
         await this.props.getAllHomeworksAsync(this.props.username)
         await this.props.getMonthHomeworksAsync(this.props.username)

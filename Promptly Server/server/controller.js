@@ -73,14 +73,59 @@ module.exports.addHomework = (req,res) =>{
     
     console.log("IN REQUEST: ", homeworkInformation)
     // construct query
-    const addHomeWorkQuery = `INSERT INTO assignment(assignment_title, description, due_date, school_email, username) VALUES ('${title}', '${description}', STR_TO_DATE('${due_date}', '%Y-%d-%m'), '${school_email}', '${username}')`
+    const addHomeWorkQuery = `INSERT INTO assignment(assignment_title, description, due_date, school_email, username, progress) VALUES ('${title}', '${description}', STR_TO_DATE('${due_date}', '%Y-%d-%m'), '${school_email}', '${username}', 'not done');`
 
     // execute query
-    database.query(addHomeWorkQuery, (err,results)=>{
+    database.query(addHomeWorkQuery, (err)=>{
         if(err){
             console.log("ADD HW SERVER ERROR IN DB, ", err)
         }else{
             return res.status(200).send({msg:"Successfully added to database!"})
+        }
+    })
+}
+
+module.exports.removeHomework = (req, res) => {
+    const homeworkID = req.params.hwID
+    
+    // construct query
+    const removeFromDB = `DELETE FROM assignment WHERE assignment_id=${homeworkID}`
+    //execute query
+    database.query(removeFromDB, (err, results)=>{
+        if(err){
+            console.log("REMOVE HW SERVER ERROR IN DB, ", err)
+        }else{
+            return res.status(200).send({msg:"Successfully removed from database!"})
+        }
+    })
+}
+
+module.exports.markHWAsDone = (req, res) => {
+    const assignmentID = req.params.hwID
+
+    //construct query
+    const markHWAsDoneQuery = `UPDATE assignment SET progress="done" WHERE assignment_id=${assignmentID};`
+    //execute query
+    database.query(markHWAsDoneQuery, (err)=>{
+        if(err){
+            console.log("MARK AS DONE HW ERROR IN DB: ", err)
+        }else{
+            return res.status(200).send({msg:"successfully marked hw as done!"})
+        }
+    })
+}
+
+module.exports.markHWAsUndone = (req, res) => {
+    const assignmentID = req.params.hwID
+
+    //construct query
+    const markHWAsNotDone = `UPDATE assignment SET progress="not done" WHERE assignment_id=${assignmentID};`
+    //execute query
+    database.query(markHWAsNotDone, (err)=>{
+        if(err){
+            console.log("MARK AS NOT DONE HW ERROR IN DB: ", err)
+        }else{
+            return res.status(200).send({msg:"successfully marked hw as not done!"})
         }
     })
 }

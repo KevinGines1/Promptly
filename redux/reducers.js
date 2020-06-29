@@ -1,4 +1,4 @@
-import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK} from './actionTypes'
+import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK, REMOVE_HW} from './actionTypes'
 
 const homeworksInitialState = {
     username: 'KevinG',
@@ -25,6 +25,13 @@ export const homeworkReducer = (state = homeworksInitialState, action) => {
             return{
                 ...state, 
                 homeworksThisWk:action.payload
+            }
+        case REMOVE_HW:
+            return{
+                ...state,
+                homeworks: state.homeworks.filter((hw)=>hw.assignment_id !== action.payload),
+                homeworksThisMonth: state.homeworksThisMonth.filter((hw)=>hw.assignment_id !== action.payload),
+                homeworksThisWk: state.homeworksThisWk.filter((hw)=>hw.assignment_id !== action.payload),
             }
         default:
             return state

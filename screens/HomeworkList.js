@@ -1,11 +1,9 @@
 import React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
-import Fonts from '../IosFonts.js'
-
+import {StyleSheet, View, Text, Button, FlatList, TouchableOpacity} from 'react-native'
+import {CheckBox} from 'react-native-elements'
 //redux
 import {connect} from 'react-redux'
-
-// make this as generic as possible, the display should only depend on the prop/param: display All HW, display This Wk HW, display This Month HW
+import {removeHomeworkAsync, markAsDone, markAsUndone} from '../redux/actions'
 
 class HomeworkList extends React.Component {
     state = {
@@ -13,67 +11,124 @@ class HomeworkList extends React.Component {
         filter: this.props.route.params?.filter,
     }
 
+    toggleCheckbox = (homeworkID, progress) => {
+
+      if(progress==="not done"){
+        console.log("inside mark as done function ",homeworkID)
+        this.props.markAsDone(homeworkID, this.props.username)
+      }else{
+        console.log("inside mark as not done function ",homeworkID)
+        this.props.markAsUndone(homeworkID, this.props.username)
+
+      }
+    }
     render(){
         const {filter} = this.state
 
         const homeworks = filter === "all" ? this.props.homeworksAll : 
         filter === "this week" ? this.props.homeworksThisWk : this.props.homeworksThisMonth
-        console.log("HOMEWORKS TO RENDER: ", filter, '\n', homeworks)
-        return(
-            <View style={styles.container}>
-                <Text style={styles.screenHeader}>{
-                    filter==="all" ? "Showing all homeworks: " : `Showing homeworks for ${filter}: `
-                }</Text>
-                {homeworks.length === 0 ? <Text>None</Text> : 
-                    homeworks.map((hw, i) => {
-                        return(
-                            <View key={i} style={styles.listContainer}>
-                                <Text style={styles.listItemTitle}>{hw.assignment_title}</Text>
-                                <Text style={styles.listItemContent}>{hw.description}</Text>
-                                <Text style={styles.duedate}> Due Date: {hw.due_date}</Text>
-                            </View>
-                        )
-                    })
-                }
-            </View>
-            // <Fonts/>
+        // console.log("HOMEWORKS TO RENDER: ", filter, '\n', homeworks)
+        return (
+          <View style={styles.container}>
+            <Text style={styles.screenHeader}>
+              {filter === "all"
+                ? "Showing all homeworks: "
+                : `Showing homeworks for ${filter}: `}
+            </Text>
+            <FlatList
+              ListEmptyComponent={() => (
+                <View>
+                  <Text style={styles.listItemTitle}>None</Text>
+                </View>
+              )}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              data={homeworks}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  key={item.assignment_id}
+                  style={styles.listContainer}
+                >
+                  <CheckBox
+                    size={24}
+                    checked={item.progress === "not done" ? false:true}
+                    checkedIcon="dot-circle-o"
+                    uncheckedIcon="circle-o"
+                    containerStyle={styles.checkbox}
+                    title={item.assignment_title}
+                    textStyle={styles.listItemTitle}
+                    onIconPress={()=>{this.toggleCheckbox(item.assignment_id, item.progress)}}
+                  />
 
-        )
+                  <Text style={styles.listItemContent}>{item.description}</Text>
+                  <Text style={styles.duedate}> Due Date: {item.due_date}</Text>
+                  <View style={styles.buttonContainer}>
+                    {/* <Button title="Finished" /> */}
+                    <Button
+                      onPress={() => {
+                        this.props.removeHomeworkAsync(item.assignment_id);
+                      }}
+                      title="Remove"
+                      style={styles.removeBtn}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.assignment_id.toString()}
+            />
+          </View>
+        );
     }
 }
 
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'flex-start',
-    }, 
-    screenHeader:{
-        padding:20,
-        fontFamily:'Arial',
-        fontSize:20,
-    },
-    listContainer:{
-        flex:0.5,
-        width:400,
-        alignItems:'flex-start',
-        // backgroundColor:'red'
-    },
-    listItemTitle:{
-        margin:1,
-        fontWeight:'bold',
-        fontSize:23
-        // backgroundColor:'red'
-    },
-    listItemContent:{
-        marginLeft:20,
-        fontSize:15
-    },
-    duedate:{
-        color:'red'
-    }
-})
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  screenHeader: {
+    padding: 20,
+    fontFamily: "Arial",
+    fontSize: 20,
+  },
+  listContainer: {
+    margin: 7,
+    flex: 1,
+    width: 400,
+    alignItems: "flex-start",
+  },
+  listItemTitle: {
+    margin: 1,
+    fontWeight: "bold",
+    fontSize: 23,
+  },
+  listItemContent: {
+    marginLeft: 20,
+    fontSize: 15,
+  },
+  listTextContainer: {
+    flex: 1,
+  },
+  buttonContainer: {
+    marginLeft:10,
+    flexDirection: "row",
+    flex: 1,
+  },
+  duedate: {
+    marginLeft: 17,
+    color: "red",
+  },
+  separator: {
+    margin: 0,
+    height: 2,
+    backgroundColor: "orange",
+  },
+  checkbox: {
+    margin: 0,
+    width:375
+  },
+});
 
 const mapStateToProps = state =>{
     return{
@@ -84,4 +139,4 @@ const mapStateToProps = state =>{
     }
 }
 
-export default connect(mapStateToProps)(HomeworkList)
+export default connect(mapStateToProps, { removeHomeworkAsync, markAsDone, markAsUndone})(HomeworkList)

@@ -1,9 +1,16 @@
 import React from 'react'
 import {View, Text, StyleSheet, Button} from 'react-native'
 
+//redux
+import {connect} from 'react-redux'
+import {getAllHomeworksAsync, getMonthHomeworksAsync, getWeekHomeworksAsync} from '../redux/actions'
+
 class HomeWorkAdded extends React.Component{
 
-    goHome = () => {
+    goHome = async () => {
+        await this.props.getAllHomeworksAsync(this.props.username)
+        await this.props.getMonthHomeworksAsync(this.props.username)
+        await this.props.getWeekHomeworksAsync(this.props.username)
         this.props.navigation.navigate("Home")
     }
 
@@ -28,4 +35,12 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HomeWorkAdded
+const mapStateToProps = state => {
+    return {
+        username : state.username
+    }
+}
+
+// export default HomeWorkAdded
+export default connect (mapStateToProps, {getAllHomeworksAsync, getMonthHomeworksAsync, getWeekHomeworksAsync
+})(HomeWorkAdded)

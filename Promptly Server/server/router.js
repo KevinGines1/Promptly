@@ -5,4 +5,7 @@ module.exports = (app) => {
     app.get('/allHWMonth/?:username', controller.getMonthHomeworks)
     app.get('/allHWWeek/?:username', controller.getWeekHomeworks)
     app.post('/addHW', controller.addHomework)
+    app.delete('/removeHW/?:hwID', controller.removeHomework)
+    app.patch('/done/?:hwID', controller.markHWAsDone)
+    app.patch('/undone/?:hwID', controller.markHWAsUndone)
 }
