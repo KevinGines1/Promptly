@@ -1,11 +1,16 @@
-import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK, REMOVE_HW} from './actionTypes'
+import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK, REMOVE_HW, GET_COURSES, GET_COURSE_HW} from './actionTypes'
 import * as api from '../utils/api/index'
 
 // * notes: there is a network error when sending a request :SOLVED: REPLACED THE BASE URL IN AXIOS WITH IPV4 ADDRESS (ipconfig)
-// * progress: checkbox has functionality
-// todo (1): some more filters for display (course, progress), authentication
+// * progress: you can display list of courses and when tapped, can display list of homeworks under that course, they can also mark it as done/undone
+// todo (1): display homeworks that are in progress only (filter)
+// todo (1.2): explore remove homework when in courses tab
 // todo (2): improve add homework feature
+// todo (3): authentication
+
 // * synchronous action creators
+
+// *homeworks
 export const getAllHomeworks = (listOfHomeworks) =>{
     return {
         type: GET_ALL_HOMEWORKS,
@@ -34,8 +39,24 @@ export const removeHW = (hwID) => {
     }
 }
 
+// *courses
+export const getCourses = (courses) => {
+    return {
+        type:GET_COURSES,
+        payload:courses
+    }
+}
+
+export const getCourseHW = (homeworks) => {
+    return {
+        type: GET_COURSE_HW,
+        payload: homeworks
+    }
+}
+
 // * asynchronous action creators
 
+// *homeworks
 export const getAllHomeworksAsync = (username) => async(dispatch) => {
     // * you can add isLoading to state to display a loading icon when fetching data
     try{
@@ -88,6 +109,7 @@ export const addHomeworkAsync = (homeworkInfo) => async(dispatch) => {
         dispatch(getAllHomeworksAsync(homeworkInfo.username))
         dispatch(getWeekHomeworksAsync(homeworkInfo.username))
         dispatch(getMonthHomeworksAsync(homeworkInfo.username))
+        dispatch(getCoursesAsync(homeworkInfo.username))
     }catch(err){
         console.log("ADD HW ERR: ", err)
     }
@@ -107,9 +129,17 @@ export const markAsDone = (homeworkID, username) => async(dispatch) => {
     try{
         const response = await api.markAsDone(homeworkID)
         console.log(response.data.msg)
+        const response1 = await api.getCourseFromID(homeworkID)
+        // console.log("MARK AS DONE IS DONE: ", response1.data[0].course)
+        const course = response1.data[0].course
+        const response2 = await api.getCourseHW(username, course)
+        const courseHWs = response2.data
+
+        dispatch(getCourseHW(courseHWs))
         dispatch(getAllHomeworksAsync(username))
         dispatch(getWeekHomeworksAsync(username))
         dispatch(getMonthHomeworksAsync(username))
+        
     }catch(err){
         console.log("MARK AS DONE HW ERR: ", err)
     }
@@ -119,10 +149,43 @@ export const markAsUndone = (homeworkID, username) => async(dispatch) => {
     try{
         const response = await api.markAsUndone(homeworkID)
         console.log(response.data.msg)
+        const response1 = await api.getCourseFromID(homeworkID)
+        // console.log("MARK AS UNDONE IS DONE: ", response1.data[0].course)
+        const course = response1.data[0].course
+        const response2 = await api.getCourseHW(username, course)
+        const courseHWs = response2.data
+
+        dispatch(getCourseHW(courseHWs))
         dispatch(getAllHomeworksAsync(username))
         dispatch(getWeekHomeworksAsync(username))
         dispatch(getMonthHomeworksAsync(username))
+
     }catch(err){
         console.log("MARK AS NOT DONE HW ERR: ", err)
     }
 }
+
+// *courses
+export const getCoursesAsync = (username) => async(dispatch)=>{
+    try{
+        const response = await api.getCourses(username)
+        const listOfCourses = response.data
+        // console.log("LIST OF COURSES: ", listOfCourses)
+        dispatch(getCourses(listOfCourses))
+    }catch(err){
+        console.log("GET COURSES ERR: ", err)
+    }
+}
+
+export const getCourseHWAsync = (username, course) => async(dispatch)=>{
+    try{
+        console.log("INSIDE GET COURSE HOMEWORKS ASYNC")
+        const response = await api.getCourseHW(username, course)
+        // console.log("RESPONSE: ", response.data)
+        const homeworks = response.data
+        dispatch(getCourseHW(homeworks))
+    }catch(err){
+        console.log("GET COURSE HOMEWORKS ERR: ", err)
+    }
+}
+

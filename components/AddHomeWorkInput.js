@@ -13,8 +13,8 @@ class AddHomeWorkInput extends React.Component{
         description:'',
         due_date:'',
         school_email: this.props.email,
-        username: this.props.username
-        // className:'',   
+        username: this.props.username,
+        course:'',   
     }
 
     handleTitleChange = event =>{
@@ -25,6 +25,9 @@ class AddHomeWorkInput extends React.Component{
     }
     handleDueChange = event =>{
         this.setState({due_date : event})
+    }
+    handleCourseChange = event =>{
+        this.setState({course : event})
     }
 
     handleFormSubmit = async event =>{
@@ -38,8 +41,8 @@ class AddHomeWorkInput extends React.Component{
           description: '',
           due_date: '',
           school_email: this.props.email,
-          username: this.props.username
-        // className:'',
+          username: this.props.username,
+          course:'',
         })
         
     }
@@ -68,12 +71,13 @@ class AddHomeWorkInput extends React.Component{
               name="due_date"
               onChangeText={this.handleDueChange}
             />
-            {/* <TextInput
-                        style={styles.inputField}
-                        placeholder="Class"
-                        name="className"
-                        onChangeText={this.handleInputChange}
-                    /> */}
+            <TextInput
+                style={styles.inputField}
+                placeholder="Class/Course"
+                name="course"
+                maxLength={10}
+                onChangeText={this.handleCourseChange}
+            />
           </KeyboardAvoidingView>
         );
     }

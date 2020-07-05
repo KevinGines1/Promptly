@@ -1,6 +1,8 @@
 import React from 'react'
 import {StyleSheet, View, Text, Button, FlatList, TouchableOpacity} from 'react-native'
 import {CheckBox} from 'react-native-elements'
+import RenderList from '../components/RenderList'
+
 //redux
 import {connect} from 'react-redux'
 import {removeHomeworkAsync, markAsDone, markAsUndone} from '../redux/actions'
@@ -11,23 +13,22 @@ class HomeworkList extends React.Component {
         filter: this.props.route.params?.filter,
     }
 
-    toggleCheckbox = (homeworkID, progress) => {
+    // toggleCheckbox = (homeworkID, progress) => {
 
-      if(progress==="not done"){
-        console.log("inside mark as done function ",homeworkID)
-        this.props.markAsDone(homeworkID, this.props.username)
-      }else{
-        console.log("inside mark as not done function ",homeworkID)
-        this.props.markAsUndone(homeworkID, this.props.username)
+    //   if(progress==="not done"){
+    //     console.log("inside mark as done function ",homeworkID)
+    //     this.props.markAsDone(homeworkID, this.props.username)
+    //   }else{
+    //     console.log("inside mark as not done function ",homeworkID)
+    //     this.props.markAsUndone(homeworkID, this.props.username)
 
-      }
-    }
+    //   }
+    // }
     render(){
         const {filter} = this.state
 
         const homeworks = filter === "all" ? this.props.homeworksAll : 
         filter === "this week" ? this.props.homeworksThisWk : this.props.homeworksThisMonth
-        // console.log("HOMEWORKS TO RENDER: ", filter, '\n', homeworks)
         return (
           <View style={styles.container}>
             <Text style={styles.screenHeader}>
@@ -43,35 +44,8 @@ class HomeworkList extends React.Component {
               )}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               data={homeworks}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  key={item.assignment_id}
-                  style={styles.listContainer}
-                >
-                  <CheckBox
-                    size={24}
-                    checked={item.progress === "not done" ? false:true}
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    containerStyle={styles.checkbox}
-                    title={item.assignment_title}
-                    textStyle={styles.listItemTitle}
-                    onIconPress={()=>{this.toggleCheckbox(item.assignment_id, item.progress)}}
-                  />
-
-                  <Text style={styles.listItemContent}>{item.description}</Text>
-                  <Text style={styles.duedate}> Due Date: {item.due_date}</Text>
-                  <View style={styles.buttonContainer}>
-                    {/* <Button title="Finished" /> */}
-                    <Button
-                      onPress={() => {
-                        this.props.removeHomeworkAsync(item.assignment_id);
-                      }}
-                      title="Remove"
-                      style={styles.removeBtn}
-                    />
-                  </View>
-                </TouchableOpacity>
+              renderItem={({ item }) => ( // * turn this into a separate component
+                <RenderList item={item} />
               )}
               keyExtractor={(item) => item.assignment_id.toString()}
             />
@@ -128,6 +102,10 @@ const styles = StyleSheet.create({
     margin: 0,
     width:375
   },
+  dropDown:{
+    height:40,
+    position:'relative',
+  },
 });
 
 const mapStateToProps = state =>{
@@ -135,7 +113,8 @@ const mapStateToProps = state =>{
         username : state.username,
         homeworksAll: state.homeworks,
         homeworksThisMonth : state.homeworksThisMonth,
-        homeworksThisWk : state.homeworksThisWk
+        homeworksThisWk : state.homeworksThisWk,
+        listOfHWInCourse : state.courseHW
     }
 }
 
