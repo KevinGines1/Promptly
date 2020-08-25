@@ -1,22 +1,22 @@
 import React from 'react'
-import {StyleSheet, View, Text, FlatList, TouchableOpacity, Button} from 'react-native'
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Button } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import RenderList from './RenderList'
 
 //redux
-import {connect} from 'react-redux'
-import {getCourseHWAsync} from '../redux/actions'
+import { connect } from 'react-redux'
+import { getCourseHWAsync } from '../redux/actions'
 
-class CourseHW extends React.Component{
-    
-    async componentDidMount(){
+class CourseHW extends React.Component {
+
+    async componentDidMount() {
         await this.props.getCourseHWAsync(this.props.username, this.props.route.params?.course)
     }
 
-    render(){
+    render() {
         const course = this.props.route.params?.course
         const homeworks = this.props.listOfHWInCourse
-        return(
+        return (
             <View style={styles.container}>
                 <Text style={styles.screenHeader}>Homeworks for {course}:</Text>
 
@@ -28,10 +28,10 @@ class CourseHW extends React.Component{
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                     data={homeworks}
-                    renderItem={({ item }) => ( 
-                        <RenderList item={item}/>                        
+                    renderItem={({ item }) => (
+                        <RenderList item={item} />
                     )}
-                    keyExtractor={(item) => item.assignment_id.toString()}
+                    keyExtractor={(item) => item.Assignment_id.toString()}
                 />
             </View>
         )
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     },
 })
 
-const mapStateToProps = state =>{
-    return{
-        courseHW : state.courseHW,
-        username : state.username,
-        listOfHWInCourse : state.courseHW
+const mapStateToProps = state => {
+    return {
+        courseHW: state.courseHW,
+        username: state.username,
+        listOfHWInCourse: state.courseHW
     }
 }
 
-export default connect(mapStateToProps, {getCourseHWAsync})(CourseHW)
+export default connect(mapStateToProps, { getCourseHWAsync })(CourseHW)

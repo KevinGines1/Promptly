@@ -1,54 +1,54 @@
 import React from 'react'
-import {StyleSheet, TouchableOpacity, Text, View, Button} from 'react-native'
-import {CheckBox} from 'react-native-elements'
+import { StyleSheet, TouchableOpacity, Text, View, Button } from 'react-native'
+import { CheckBox } from 'react-native-elements'
 //redux
-import {connect} from 'react-redux'
-import {markAsDone, markAsUndone, removeHomeworkAsync} from '../redux/actions'
+import { connect } from 'react-redux'
+import { markAsDone, markAsUndone, removeHomeworkAsync } from '../redux/actions'
 
-class RenderList extends React.Component{
+class RenderList extends React.Component {
 
-    toggleCheckbox = (homeworkID, progress) =>{
+    toggleCheckbox = async (homeworkID, progress) => {
         if (progress === "not done") {
             // console.log("inside mark as done function ", homeworkID)
-            this.props.markAsDone(homeworkID, this.props.username)
+            await this.props.markAsDone(homeworkID, this.props.username)
         } else {
             // console.log("inside mark as not done function ", homeworkID)
-            this.props.markAsUndone(homeworkID, this.props.username)
+            await this.props.markAsUndone(homeworkID, this.props.username)
 
         }
     }
-    render(){
+    render() {
         const item = this.props.item
-        return(
+        return (
             <TouchableOpacity
-                key={item.assignment_id}
+                key={item.Assignment_id}
                 style={styles.listContainer}
             >
                 <CheckBox
                     size={24}
-                    checked={item.progress === "not done" ? false : true}
+                    checked={item.Progress === "done" ? true : false}
                     checkedIcon="dot-circle-o"
                     uncheckedIcon="circle-o"
                     containerStyle={styles.checkbox}
-                    title={item.assignment_title}
+                    title={item.Assignment_title}
                     textStyle={styles.listItemTitle}
-                    onIconPress={() => {
-                        this.toggleCheckbox(item.assignment_id, item.progress);
+                    onPress={() => {
+                        this.toggleCheckbox(item.Assignment_id, item.Progress);
                     }}
                 />
 
-                <Text style={styles.listItemContent}>{item.description}</Text>
+                <Text style={styles.listItemContent}>{item.Description}</Text>
                 <Text style={styles.listItemContent}>
-                    Progress: {item.progress}
+                    Progress: {item.Progress}
                 </Text>
                 <Text style={styles.listItemContent}>
-                    Course : {item.course}
+                    Course : {item.Course}
                 </Text>
-                <Text style={styles.duedate}> Due Date: {item.due_date}</Text>
+                <Text style={styles.duedate}> Due Date: {item.Due_date}</Text>
                 <View style={styles.buttonContainer}>
                     <Button
                         onPress={() => {
-                            this.props.removeHomeworkAsync(item.assignment_id);
+                            this.props.removeHomeworkAsync(item.Assignment_id);
                         }}
                         title="Remove"
                         style={styles.removeBtn}
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         margin: 0,
-        width: 375
+        width: 375,
+        backgroundColor: 'rgba(52, 52, 52, 0)'
     },
     dropDown: {
         height: 40,
@@ -112,13 +113,13 @@ const styles = StyleSheet.create({
     },
 })
 
-const mapStateToProps = state =>{
-    return{
-        username : state.username,
+const mapStateToProps = state => {
+    return {
+        username: state.username,
         homeworksAll: state.homeworks,
         homeworksThisMonth: state.homeworksThisMonth,
         homeworksThisWk: state.homeworksThisWk
     }
 }
 
-export default connect(mapStateToProps, {markAsDone, markAsUndone, removeHomeworkAsync})(RenderList) 
+export default connect(mapStateToProps, { markAsDone, markAsUndone, removeHomeworkAsync })(RenderList) 

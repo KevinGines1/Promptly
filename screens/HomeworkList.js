@@ -1,57 +1,46 @@
 import React from 'react'
-import {StyleSheet, View, Text, Button, FlatList, TouchableOpacity} from 'react-native'
-import {CheckBox} from 'react-native-elements'
+import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from 'react-native'
+import { CheckBox } from 'react-native-elements'
 import RenderList from '../components/RenderList'
 
 //redux
-import {connect} from 'react-redux'
-import {removeHomeworkAsync, markAsDone, markAsUndone} from '../redux/actions'
+import { connect } from 'react-redux'
+import { removeHomeworkAsync, markAsDone, markAsUndone } from '../redux/actions'
 
 class HomeworkList extends React.Component {
-    state = {
-        username: this.props.username,
-        filter: this.props.route.params?.filter,
-    }
+  state = {
+    username: this.props.username,
+    filter: this.props.route.params?.filter,
+  }
+  render() {
+    const { filter } = this.state
 
-    // toggleCheckbox = (homeworkID, progress) => {
+    const homeworks = filter === "all" ? this.props.homeworksAll :
+      filter === "this week" ? this.props.homeworksThisWk : this.props.homeworksThisMonth
+    return (
+      <View style={styles.container}>
+        <Text style={styles.screenHeader}>
+          {filter === "all"
+            ? "Showing all homeworks: "
+            : `Showing homeworks for ${filter}: `}
+        </Text>
 
-    //   if(progress==="not done"){
-    //     console.log("inside mark as done function ",homeworkID)
-    //     this.props.markAsDone(homeworkID, this.props.username)
-    //   }else{
-    //     console.log("inside mark as not done function ",homeworkID)
-    //     this.props.markAsUndone(homeworkID, this.props.username)
-
-    //   }
-    // }
-    render(){
-        const {filter} = this.state
-
-        const homeworks = filter === "all" ? this.props.homeworksAll : 
-        filter === "this week" ? this.props.homeworksThisWk : this.props.homeworksThisMonth
-        return (
-          <View style={styles.container}>
-            <Text style={styles.screenHeader}>
-              {filter === "all"
-                ? "Showing all homeworks: "
-                : `Showing homeworks for ${filter}: `}
-            </Text>
-            <FlatList
-              ListEmptyComponent={() => (
-                <View>
-                  <Text style={styles.listItemTitle}>None</Text>
-                </View>
-              )}
-              ItemSeparatorComponent={() => <View style={styles.separator} />}
-              data={homeworks}
-              renderItem={({ item }) => ( // * turn this into a separate component
-                <RenderList item={item} />
-              )}
-              keyExtractor={(item) => item.assignment_id.toString()}
-            />
-          </View>
-        );
-    }
+        <FlatList
+          ListEmptyComponent={() => (
+            <View>
+              <Text style={styles.listItemTitle}>None</Text>
+            </View>
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          data={homeworks}
+          renderItem={({ item }) => ( // * turn this into a separate component
+            <RenderList item={item} />
+          )}
+          keyExtractor={(item) => item.Assignment_id.toString()}
+        />
+      </View>
+    );
+  }
 }
 
 
@@ -85,7 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    marginLeft:10,
+    marginLeft: 10,
     flexDirection: "row",
     flex: 1,
   },
@@ -100,22 +89,23 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     margin: 0,
-    width:375
+    width: 375,
+    backgroundColor: 'rgba(52, 52, 52, 0)'
   },
-  dropDown:{
-    height:40,
-    position:'relative',
+  dropDown: {
+    height: 40,
+    position: 'relative',
   },
 });
 
-const mapStateToProps = state =>{
-    return{
-        username : state.username,
-        homeworksAll: state.homeworks,
-        homeworksThisMonth : state.homeworksThisMonth,
-        homeworksThisWk : state.homeworksThisWk,
-        listOfHWInCourse : state.courseHW
-    }
+const mapStateToProps = state => {
+  return {
+    username: state.username,
+    homeworksAll: state.homeworks,
+    homeworksThisMonth: state.homeworksThisMonth,
+    homeworksThisWk: state.homeworksThisWk,
+    listOfHWInCourse: state.courseHW
+  }
 }
 
-export default connect(mapStateToProps, { removeHomeworkAsync, markAsDone, markAsUndone})(HomeworkList)
+export default connect(mapStateToProps, { removeHomeworkAsync, markAsDone, markAsUndone })(HomeworkList)

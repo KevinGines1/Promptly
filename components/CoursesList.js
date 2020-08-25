@@ -10,22 +10,22 @@ class CoursesList extends React.Component {
         const courses = this.props.courses
         return (
             <View style={styles.listContainer}>
-            <Text style={styles.header}>Courses:</Text>
-            <FlatList 
-                ListEmptyComponent={() => (
-                    <View>
-                        <Text style={styles.listItemTitle}>None</Text>
-                    </View>
-                )}
-                data={courses}
-                renderItem={({item, index})=>(
-                    <TouchableOpacity key={index} style={styles.itemHolder} onPress = {()=>this.props.navigation.navigate('CourseHW', {course: item.course})}>
-                        <Text style={styles.listItem}><Entypo name="open-book" size={25} color="black" /> {item.course}</Text>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
+                <Text style={styles.header}>Courses:</Text>
+                <FlatList
+                    ListEmptyComponent={() => (
+                        <View>
+                            <Text style={styles.listItemTitle}>None</Text>
+                        </View>
+                    )}
+                    data={courses}
+                    renderItem={({ item, index }) => (
+                        <TouchableOpacity key={index} style={styles.itemHolder} onPress={() => this.props.navigation.navigate('CourseHW', { course: item.Course })}>
+                            <Text style={styles.listItem}><Entypo name="open-book" size={25} color="black" /> {item.Course}</Text>
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={(item, index) => index.toString()}
 
-            />
+                />
             </View>
 
         )
@@ -34,21 +34,21 @@ class CoursesList extends React.Component {
 
 
 const styles = StyleSheet.create({
-    listItem:{
+    listItem: {
         margin: 1,
         fontSize: 30,
     },
-    itemHolder:{
-        flex:1,
-        justifyContent:'space-between',
-        width:400,
+    itemHolder: {
+        flex: 1,
+        justifyContent: 'space-between',
+        width: 400,
     },
-    listContainer:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'flex-start'
+    listContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start'
     },
-    header:{
+    header: {
         padding: 20,
         fontFamily: "Arial",
         fontSize: 20,
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        courses : state.courses
+        courses: state.courses
         // username: state.username,
         // homeworks: state.homeworks,
         // homeworksThisMonth: state.homeworksThisMonth
