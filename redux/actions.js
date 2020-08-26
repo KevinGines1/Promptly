@@ -5,6 +5,7 @@ import * as api from '../utils/api/index'
 // * progress: add hw form input already clears when submitted, no back button when in homework added screen, stack navigator pops to form screen
 // todo (1): display homeworks that are in progress only (filter)
 // todo (2): improve add homework input fields
+// * progress for this^ : now using a datepicker from https://openbase.io/js/react-native-modal-datetime-picker/documentation#setup-for-expo-projects
 // todo (3): remove a course in the course list when it does not have a homework anymore (?)
 // todo (4): authentication
 
