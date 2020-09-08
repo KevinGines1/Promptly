@@ -19,43 +19,89 @@ class RenderList extends React.Component {
     }
     render() {
         const item = this.props.item
-        return (
-            <TouchableOpacity
-                key={item.Assignment_id}
-                style={styles.listContainer}
-            >
-                <CheckBox
-                    size={24}
-                    checked={item.Progress === "done" ? true : false}
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    containerStyle={styles.checkbox}
-                    title={item.Assignment_title}
-                    textStyle={styles.listItemTitle}
-                    onPress={() => {
-                        this.toggleCheckbox(item.Assignment_id, item.Progress);
-                    }}
-                />
+        const inProgressOnly = this.props.inProgressOnly
+        // console.log("AM HERE BRUH!", this.props.inProgressOnly)
+        if (inProgressOnly) {
+            if (item.Progress === "not done") {
+                return (
+                    <TouchableOpacity
+                        key={item.Assignment_id}
+                        style={styles.listContainer}
+                    >
+                        <CheckBox
+                            size={24}
+                            checked={item.Progress === "done" ? true : false}
+                            checkedIcon="dot-circle-o"
+                            uncheckedIcon="circle-o"
+                            containerStyle={styles.checkbox}
+                            title={item.Assignment_title}
+                            textStyle={styles.listItemTitle}
+                            onPress={() => {
+                                this.toggleCheckbox(item.Assignment_id, item.Progress);
+                            }}
+                        />
 
-                <Text style={styles.listItemContent}>{item.Description}</Text>
-                <Text style={styles.listItemContent}>
-                    Progress: {item.Progress}
-                </Text>
-                <Text style={styles.listItemContent}>
-                    Course : {item.Course}
-                </Text>
-                <Text style={styles.duedate}> Due Date: {item.Due_date}</Text>
-                <View style={styles.buttonContainer}>
-                    <Button
+                        <Text style={styles.listItemContent}>{item.Description}</Text>
+                        <Text style={styles.listItemContent}>
+                            Progress: {item.Progress}
+                        </Text>
+                        <Text style={styles.listItemContent}>
+                            Course : {item.Course}
+                        </Text>
+                        <Text style={styles.duedate}> Due Date: {item.Due_date}</Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                onPress={() => {
+                                    this.props.removeHomeworkAsync(item.Assignment_id);
+                                }}
+                                title="Remove"
+                                style={styles.removeBtn}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                )
+            } else {
+                return null
+            }
+        } else if (inProgressOnly === false) {
+            return (
+                <TouchableOpacity
+                    key={item.Assignment_id}
+                    style={styles.listContainer}
+                >
+                    <CheckBox
+                        size={24}
+                        checked={item.Progress === "done" ? true : false}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                        containerStyle={styles.checkbox}
+                        title={item.Assignment_title}
+                        textStyle={styles.listItemTitle}
                         onPress={() => {
-                            this.props.removeHomeworkAsync(item.Assignment_id);
+                            this.toggleCheckbox(item.Assignment_id, item.Progress);
                         }}
-                        title="Remove"
-                        style={styles.removeBtn}
                     />
-                </View>
-            </TouchableOpacity>
-        )
+
+                    <Text style={styles.listItemDesc}>{item.Description}</Text>
+                    {/* <Text style={styles.listItemContent}>
+                        Progress: {item.Progress}
+                    </Text> */}
+                    <Text style={styles.listItemContent}>
+                        Course : {item.Course}
+                    </Text>
+                    <Text style={styles.duedate}> Due Date: {item.Due_date}</Text>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            onPress={() => {
+                                this.props.removeHomeworkAsync(item.Assignment_id);
+                            }}
+                            title="Remove"
+                            style={styles.removeBtn}
+                        />
+                    </View>
+                </TouchableOpacity>
+            )
+        } else return null
     }
 }
 
@@ -78,7 +124,7 @@ const styles = StyleSheet.create({
     },
     listItemTitle: {
         margin: 1,
-        fontWeight: "bold",
+        // fontWeight: "bold",
         fontSize: 23,
     },
     listItemContent: {
@@ -111,11 +157,15 @@ const styles = StyleSheet.create({
         height: 40,
         position: 'relative',
     },
+    listItemDesc: {
+        fontStyle: "italic",
+        marginLeft: 20,
+    }
 })
 
 const mapStateToProps = state => {
     return {
-        username: state.username,
+        username: state.user.username,
         homeworksAll: state.homeworks,
         homeworksThisMonth: state.homeworksThisMonth,
         homeworksThisWk: state.homeworksThisWk

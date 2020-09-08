@@ -8,3 +8,7 @@ export const REMOVE_HW = "REMOVE_HW"
 // *courses
 export const GET_COURSES = "GET_COURSES"
 export const GET_COURSE_HW = "GET_COURSE_HW"
+
+
+// *user
+export const GET_STUDENT_INFO = "GET STUDENT INFO"

@@ -1,8 +1,23 @@
-import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK, REMOVE_HW, GET_COURSES, GET_COURSE_HW } from './actionTypes'
+import {
+    GET_ALL_HOMEWORKS,
+    ADD_HOMEWORK,
+    GET_HOMEWORKS_MONTH,
+    GET_HOMEWORKS_WEEK,
+    REMOVE_HW,
+    GET_COURSES,
+    GET_COURSE_HW,
+    GET_STUDENT_INFO
+} from './actionTypes'
 
 const homeworksInitialState = {
-    username: 'KevinGines1',
-    email: 'kagines1@up.edu.ph',
+    user: {
+        username: "KevinGines1",
+        name: "Kevin Ayco Gines",
+        profile_picture: null,
+        email: "kagines1@up.edu.ph"
+    },
+    // username: 'KevinGines1',
+    // email: 'kagines1@up.edu.ph',
     homeworks: [],
     homeworksThisMonth: [],
     homeworksThisWk: [],
@@ -45,6 +60,17 @@ export const homeworkReducer = (state = homeworksInitialState, action) => {
             return {
                 ...state,
                 courseHW: action.payload
+            }
+        case GET_STUDENT_INFO:
+            console.log("PAYLOAD: ", action.payload)
+            return {
+                ...state,
+                user: {
+                    username: action.payload.Username,
+                    name: action.payload.Name,
+                    profile_picture: action.payload.Profile_picture,
+                    email: action.payload.School_email
+                }
             }
         default:
             return state

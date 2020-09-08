@@ -184,3 +184,19 @@ module.exports.getCourseFromID = (req, res) => {
         }
     })
 }
+
+module.exports.getStudentInfo = (req, res) => {
+    try {
+        console.log("IM HERE!!!!!")
+        const username = req.params.username
+        //create query
+        const getStudentInfoQuery = `SELECT Username, School_email, Name, Profile_picture FROM STUDENT WHERE Username="${username}"`
+        database.query(getStudentInfoQuery, (err, result) => {
+            // console.log("DB PROFILE RESULT: ", result)
+            res.status(200).send(result)
+        })
+    } catch (err) {
+        console.log("GET USER INFO FROM DB ERR: ", err)
+        throw new Error(err)
+    }
+}

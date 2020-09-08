@@ -13,4 +13,6 @@ module.exports = (app) => {
     app.get('/courses/?:username', controller.getCourses)
     app.get('/homeworks/?:username&:course', controller.getCourseHW)
     app.get('/course/?:hwID', controller.getCourseFromID)
+    // * student
+    app.get('/student/?:username', controller.getStudentInfo)
 }

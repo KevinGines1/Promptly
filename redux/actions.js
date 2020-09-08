@@ -1,13 +1,24 @@
-import { GET_ALL_HOMEWORKS, ADD_HOMEWORK, GET_HOMEWORKS_MONTH, GET_HOMEWORKS_WEEK, REMOVE_HW, GET_COURSES, GET_COURSE_HW } from './actionTypes'
+import {
+    GET_ALL_HOMEWORKS,
+    ADD_HOMEWORK,
+    GET_HOMEWORKS_MONTH,
+    GET_HOMEWORKS_WEEK,
+    REMOVE_HW,
+    GET_COURSES,
+    GET_COURSE_HW,
+    GET_STUDENT_INFO
+} from './actionTypes'
 import * as api from '../utils/api/index'
 
 // * notes: there is a network error when sending a request :SOLVED: REPLACED THE BASE URL IN AXIOS WITH IPV4 ADDRESS (ipconfig)
-// * progress: add hw form input already clears when submitted, no back button when in homework added screen, stack navigator pops to form screen
-// todo (1): display homeworks that are in progress only (filter)
-// todo (2): improve add homework input fields
+// * progress: profile tab- displays user info; havent tried if user has a photo
+// todo (1): profile tab
+// todo (2): search tab
+// todo (3): authentication - try to learn OAuth or something for this
+// todo (4): user can add a course
+
+// todo (*): improve add homework input fields
 // * progress for this^ : now using a datepicker from https://openbase.io/js/react-native-modal-datetime-picker/documentation#setup-for-expo-projects
-// todo (3): remove a course in the course list when it does not have a homework anymore (?)
-// todo (4): authentication
 
 // * synchronous action creators
 
@@ -51,6 +62,14 @@ export const getCourseHW = (homeworks) => {
     return {
         type: GET_COURSE_HW,
         payload: homeworks
+    }
+}
+
+// *user
+export const getStudentInfo = (userInfo) => {
+    return {
+        type: GET_STUDENT_INFO,
+        payload: userInfo
     }
 }
 
@@ -196,3 +215,15 @@ export const getCourseHWAsync = (username, course) => async (dispatch) => {
     }
 }
 
+
+// *student
+export const getStudentInfoAsync = (username) => async (dispatch) => {
+    try {
+        const response = await api.getUserInfo(username)
+        console.log("DATA", response.data[0])
+        const userInfo = response.data[0]
+        dispatch(getStudentInfo(userInfo))
+    } catch (err) {
+        console.log("GET USER INFO AXIOS ERROR: ", err)
+    }
+}

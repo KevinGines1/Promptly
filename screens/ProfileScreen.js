@@ -1,38 +1,44 @@
-import * as React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
-import {createStackNavigator} from '@react-navigation/stack'
-import HomeworkList from './HomeworkList.js' // placeholder, this should be a screen for the user profile
-import Fonts from '../IosFonts.js'
+import React from 'react'
+import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native'
 
-export default function ProfileScreen({navigation}){
-    
-    const HomeStack = createStackNavigator();
-    
-    return(
-        <HomeStack.Navigator 
-            screenOptions={{
-                headerTitle: 'Prompt.ly',
-                headerStyle:{backgroundColor:'orange', height:125},
-                // headerTitleStyle:{fontSize:40, color:'white', fontFamily:'Chalkduster'}
-                headerTitleStyle:{fontSize:50, color:'white', fontFamily:'Noteworthy'}
-            }}    
-        >
-            <HomeStack.Screen name="Fonts" component={Fonts} />
-            {/* <HomeStack.Screen name="All Homeworks" component={HomeworkList}/> */}
-        </HomeStack.Navigator>
-    )
+//redux
+import { connect } from 'react-redux'
+// import { getUserInfo } from '../utils/api/user'
+
+
+
+class ProfileScreen extends React.Component {
+    render() {
+        return (
+            <View>
+                {
+                    this.props.user.profile_picture === null ?
+                        <AntDesign name="user" size={100} style={styles.profilePic} />
+                        :
+                        <Text>May profile pic</Text>
+                }
+                <Text>NAME: {this.props.user.name}</Text>
+                <Text>USERNAME: {this.props.user.username}</Text>
+                <Text>EMAIL: {this.props.user.email}</Text>
+            </View>
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    profilePic: {
+        color: "grey",
+    }
+})
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
 }
 
 
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center'
-    }, 
-    screenHeader:{
-        padding:20,
-        fontFamily:'Arial',
-        fontSize:20,
-    }
-})
+
+// export default ProfileScreen
+export default connect(mapStateToProps)(ProfileScreen)

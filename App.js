@@ -1,71 +1,73 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import HomeTab from './screens/HomeTab.js'
-import CoursesScreen from './screens/CoursesScreen.js'
-import AddScreen from './screens/AddScreen.js'
-import SearchScreen from './screens/SearchScreen.js'
-import ProfileScreen from './screens/ProfileScreen.js'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
+//tabs
+import HomeTab from './screens/HomeTab.js'
+import CoursesTab from './screens/CoursesTab.js'
+import AddScreen from './screens/AddTab.js'
+import SearchScreen from './screens/SearchScreen.js'
+import ProfileTab from './screens/ProfileTab.js'
+
 //redux
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import store from './redux/store'
 
 class App extends React.Component {
 
-  
-  render(){
+
+  render() {
     const Tabs = createBottomTabNavigator();
     return (
       <Provider store={store}>
         <NavigationContainer>
           <Tabs.Navigator mode="modal"
             initialRouteName="HomeTab"
-            screenOptions={({route}) =>({
+            screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
-  
+
                 if (route.name === 'Home') {
                   iconName = 'ios-home'
                 } else if (route.name === 'Profile') {
                   iconName = 'ios-person'
-                } else if (route.name === 'Courses'){
+                } else if (route.name === 'Courses') {
                   iconName = 'ios-school'
-                } else if (route.name === 'Search'){
+                } else if (route.name === 'Search') {
                   iconName = 'ios-search'
-                } else if (route.name === 'Add Homework'){
+                } else if (route.name === 'Add Homework') {
                   iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline'
                 }
-  
+
                 return <Ionicons name={iconName} size={size} color={color} />;
-                },
+              },
             })}
             tabBarOptions={{
               activeTintColor: 'orange'
             }}
           >
-              <Tabs.Screen
-                name="Home"
-                component={HomeTab}
-              />
-              <Tabs.Screen
-                name="Courses"
-                component={CoursesScreen}
-              />
-              <Tabs.Screen
-                name="Add Homework"
-                component={AddScreen}
-              />
-              <Tabs.Screen
-                name="Search"
-                component={SearchScreen}
-              />
-              <Tabs.Screen
-                name="Profile"
-                component={ProfileScreen}
-              />
+            <Tabs.Screen
+              name="Home"
+              component={HomeTab}
+            />
+            <Tabs.Screen
+              name="Courses"
+              component={CoursesTab}
+            />
+            <Tabs.Screen
+              name="Add Homework"
+              component={AddScreen}
+            />
+            <Tabs.Screen
+              name="Search"
+              component={SearchScreen}
+            />
+            <Tabs.Screen
+              name="Profile"
+              component={ProfileTab}
+            />
           </Tabs.Navigator>
         </NavigationContainer>
       </Provider>
@@ -83,9 +85,9 @@ const styles = StyleSheet.create({
 });
 
 // const mapStateToProps = state => {
-  // return {
-    // username : state.username
-  // }
+// return {
+// username : state.username
+// }
 // }
 
 // export default connect(mapStateToProps, { getAllHomeworksAsync, getAllHomeworksMonth})(App)

@@ -5,7 +5,13 @@ import HomeScreen from './HomeScreen.js'
 
 //redux
 import { connect } from 'react-redux'
-import { getAllHomeworksAsync, getMonthHomeworksAsync, getWeekHomeworksAsync, getCoursesAsync } from '../redux/actions'
+import {
+    getAllHomeworksAsync,
+    getMonthHomeworksAsync,
+    getWeekHomeworksAsync,
+    getCoursesAsync,
+    getStudentInfoAsync
+} from '../redux/actions'
 
 class HomeTab extends React.Component {
 
@@ -15,6 +21,7 @@ class HomeTab extends React.Component {
         await this.props.getMonthHomeworksAsync(this.props.username)
         await this.props.getWeekHomeworksAsync(this.props.username)
         await this.props.getCoursesAsync(this.props.username)
+        await this.props.getStudentInfoAsync(this.props.username)
     }
 
     render() {
@@ -53,7 +60,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        username: state.username
+        username: state.user.username
     }
 }
-export default connect(mapStateToProps, { getAllHomeworksAsync, getMonthHomeworksAsync, getWeekHomeworksAsync, getCoursesAsync })(HomeTab)
+export default connect(mapStateToProps, { getAllHomeworksAsync, getMonthHomeworksAsync, getWeekHomeworksAsync, getCoursesAsync, getStudentInfoAsync })(HomeTab)

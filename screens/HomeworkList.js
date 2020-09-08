@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity, TouchableHighlight } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import RenderList from '../components/RenderList'
 
@@ -11,6 +11,13 @@ class HomeworkList extends React.Component {
   state = {
     username: this.props.username,
     filter: this.props.route.params?.filter,
+    inProgressOnly: false
+  }
+
+  toggleProgress = () => {
+    this.setState((prevState) => ({
+      inProgressOnly: !(prevState.inProgressOnly)
+    }))
   }
   render() {
     const { filter } = this.state
@@ -24,17 +31,19 @@ class HomeworkList extends React.Component {
             ? "Showing all homeworks: "
             : `Showing homeworks for ${filter}: `}
         </Text>
-
+        <TouchableOpacity onPress={this.toggleProgress} style={styles.toggleProgressFilter}>
+          <Text style={styles.toggleTextStyle}>{this.state.inProgressOnly === false ? "Tap here to show unfinished homeworks only" : "Tap here to show unfinished & finished homeworks"}</Text>
+        </TouchableOpacity>
         <FlatList
           ListEmptyComponent={() => (
             <View>
               <Text style={styles.listItemTitle}>None</Text>
             </View>
           )}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          // ItemSeparatorComponent={() => <View style={styles.separator} />}
           data={homeworks}
           renderItem={({ item }) => ( // * turn this into a separate component
-            <RenderList item={item} />
+            <RenderList item={item} inProgressOnly={this.state.inProgressOnly} />
           )}
           keyExtractor={(item) => item.Assignment_id.toString()}
         />
@@ -51,9 +60,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   screenHeader: {
-    padding: 20,
+    padding: 10,
     fontFamily: "Arial",
     fontSize: 20,
+    fontWeight: 'bold',
   },
   listContainer: {
     margin: 7,
@@ -63,7 +73,6 @@ const styles = StyleSheet.create({
   },
   listItemTitle: {
     margin: 1,
-    fontWeight: "bold",
     fontSize: 23,
   },
   listItemContent: {
@@ -96,11 +105,14 @@ const styles = StyleSheet.create({
     height: 40,
     position: 'relative',
   },
+  toggleTextStyle: {
+    fontSize: 15,
+  }
 });
 
 const mapStateToProps = state => {
   return {
-    username: state.username,
+    username: state.user.username,
     homeworksAll: state.homeworks,
     homeworksThisMonth: state.homeworksThisMonth,
     homeworksThisWk: state.homeworksThisWk,

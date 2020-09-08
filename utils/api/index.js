@@ -3,6 +3,7 @@ import axios from 'axios'
 //instantiate axios
 
 const api = axios.create({
+    // baseURL: process.env.BASE_URL, // server port; retrieved thru ipconfig, the IP of LAN
     baseURL: 'http://192.168.254.108:3001', // server port; retrieved thru ipconfig, the IP of LAN
     // baseURL: 'http://192.168.254.254:3001', // server port
     // baseURL: 'http://localhost:3001', // server port
@@ -16,3 +17,4 @@ const api = axios.create({
 export default api
 export * from './homeworks'
 export * from './courses'
+export * from './user'

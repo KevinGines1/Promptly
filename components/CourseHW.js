@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         courseHW: state.courseHW,
-        username: state.username,
+        username: state.user.username,
         listOfHWInCourse: state.courseHW
     }
 }
